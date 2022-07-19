@@ -5,6 +5,7 @@ import pandas as pd
 sshtunnel.SSH_TIMEOUT = 5.0
 sshtunnel.TUNNEL_TIMEOUT = 5.0
 
+#method to select query in MySQL by SSH
 def ssh_MySQL_connector_select(userNameSSH,passSSH,ipAddressSSH,portSSH,userNameDB,passDB,dbName,query):
     # userNameSSH = "string"
     # passSSH = "string"
@@ -30,7 +31,6 @@ def ssh_MySQL_connector_select(userNameSSH,passSSH,ipAddressSSH,portSSH,userName
             )
 
             data = pd.read_sql_query(query, connection)
-            #query
         except BaseException as e:
             print('problem: ', e)
             return (data, False)
@@ -38,7 +38,7 @@ def ssh_MySQL_connector_select(userNameSSH,passSSH,ipAddressSSH,portSSH,userName
         connection.close()
         return (data, True)
 
-
+#method to insert query in MySQL by SSH
 def ssh_MySQL_connector_insert(userNameSSH,passSSH,ipAddressSSH,portSSH,userNameDB,passDB,dbName,query):
     # userNameSSH = "string"
     # passSSH = "string"
@@ -49,7 +49,6 @@ def ssh_MySQL_connector_insert(userNameSSH,passSSH,ipAddressSSH,portSSH,userName
     # dbName = "string"
     # query = '''INSERT INTO table_name (column1, column2)
     # VALUES ('value1', 'value1');'''
-    data = pd.DataFrame()
 
     with sshtunnel.SSHTunnelForwarder(
         (ipAddressSSH, portSSH),
@@ -66,7 +65,6 @@ def ssh_MySQL_connector_insert(userNameSSH,passSSH,ipAddressSSH,portSSH,userName
             curosr = connection.cursor()
             curosr.execute(query)
             connection.commit()
-            #query
         except BaseException as e:
             print('problem: ', e)
             return (False)
